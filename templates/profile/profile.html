@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+ <div class="container mt-3">
+    <h3 style="margin-top: -16px" class="display-4 text-center bg-light border-bottom">{{profile.user}}</h3>
+    <div class="row mt-3">
+    <div class="col-3">
+    {% if profile.photo %}
+     <img src='{{profile.photo.url}}' width="150" height="150" alt="profile-pic" class="rounded-circle"/>
+    {% else %}
+    <img src="{% static 'images/default-profile.png' %}" width="150" height="150" alt="profile-pic" class="rounded-circle"/>
+    {% endif %}
+
+    </div>
+    <div class="col-9 mt-3">
+    <div class="d-flex flex-column">
+    <div class='d-flex flex-row' style="margin-top: -10px">
+        <p class="m-2">{{posts.count}}
+        <br>
+        <span>posts</span> 
+        </p>
+
+           <p class="m-2">{{profile.followers.all.count}}
+        <br>
+        <span>followers</span> 
+        </p>
+
+           <p class="m-2">{{following_profiles.count}}
+        <br>
+        <span>following</span> 
+        </p>
+        
+    </div>
+     {% if user.is_authenticated %}
+    <div class="d-flex flex-row">
+        {% if following and profile.user.id != user.id%}
+                <button id="unfollow" style="width: 100px" class="m-2 btn btn-outline-primary">
+        Unfollow
+        </button>
+           <button class="m-2 btn btn-outline-dark">
+        Message
+        </button>
+        {% elif profile.user.id == user.id %}
+         <button id="edit_profile" style="width: 200px" class="m-2  btn btn-outline-dark">
+        Edit Profile
+        </button>
+        {% else %}
+                  <button id="follow" style="width: 100px" class="m-2 btn btn-primary">
+        Follow
+        </button>
+                 <button class="m-2 btn btn-outline-dark">
+        Message
+        </button>
+        {% endif %}
+        
+       
+    </div>
+    {% endif %}
+    </div>
+    </div>
+    </div>
+    <h4 class="mt-2">{{profile.user.first_name| capfirst}} {{profile.user.last_name | capfirst}}</h4>
+
+        <!--  Bio Section  -->
+    <div class="row m-2" style="border-bottom: 2px solid #ddd; padding-bottom: 30px">
+    <p>
+        {{profile.bio}}
+    </p>
+    </div>
+
+        <!--  Posts Section  -->
+       {% if posts %}
+       {% for post in posts  %}
+       <img src='{{post.image.url}}' class="img-thumbnail m-2" width="250"/>
+       {% endfor %}
+       {% endif %}
+
+ </div>
+
+    <form action="{% url 'follow' %}" method="POST" style="display:none" id="follow_form">
+    {% csrf_token %}
+    <input type="text" name="userid" value="{{profile.id}}" />
+    <input type="text" name="username" value="{{profile.user}}" />
+
+    </form>
+
+        <form action="{% url 'unfollow' %}" method="POST" style="display:none" id="unfollow_form">
+    {% csrf_token %}
+    <input type="text" name="userid" value="{{profile.id}}" />
+    <input type="text" name="username" value="{{profile.user}}" />
+
+    </form>
+
+    <script>
+    if(document.getElementById('follow')) {
+    document.getElementById('follow').addEventListener('click', function() {
+        document.getElementById('follow_form').submit();
+    })
+    }
+
+      if(document.getElementById('unfollow')) {
+    document.getElementById('unfollow').addEventListener('click', function() {
+        document.getElementById('unfollow_form').submit();
+    })
+    }
+    </script>
+ 
+{% endblock  %}

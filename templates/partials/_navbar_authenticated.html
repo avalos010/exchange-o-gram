@@ -1,0 +1,41 @@
+<nav class="navbar navbar-light fixed-top" style="background-color: #ddd;">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  {% include "partials/_search.html" %}
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a 
+      {% if 'feed' in request.path %}
+      class="nav-item nav-link active"
+        {% else %}
+        class="nav-item nav-link"
+      {% endif %}
+      href="{% url 'feed' %}">Feed</a>
+      <a
+       {% if user in request.path %}
+    class="nav-item nav-link active" 
+       {% else %}
+    class="nav-item nav-link" 
+       {% endif %}
+       class="nav-item nav-link active" href="{% url 'profile' user %}">{{user|capfirst}}</a>
+      <a class="nav-item nav-link" href="#">Account</a>
+      <a class="nav-item nav-link" style="cursor: pointer" onClick=logout()>Logout</a>
+
+    </div>
+  </div>
+
+    <form style="display: none" id="logout_form" action="{% url 'logout' %}" method="POST">
+    {% csrf_token %}
+    </form>
+    <a class="navbar-brand" href="#">
+    <img src="https://f0.pngfuel.com/png/146/778/camera-logo-png-clip-art.png" width="100" class="d-inline-block align-top" alt="">
+  </a>
+</nav>
+
+
+<script>
+function logout() {
+  document.getElementById('logout_form').submit()
+}
+</script>
