@@ -19,7 +19,7 @@
     class="nav-item nav-link" 
        {% endif %}
        class="nav-item nav-link active" href="{% url 'profile' user %}">{{user|capfirst}}</a>
-      <a class="nav-item nav-link" href="#">Account</a>
+      <a class="nav-item nav-link" href="{% url 'settings' %}">Account</a>
       <a class="nav-item nav-link" style="cursor: pointer" onClick=logout()>Logout</a>
 
     </div>

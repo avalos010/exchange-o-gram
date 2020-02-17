@@ -47,3 +47,10 @@ def logout(request):
     if request.method == 'POST':
         auth.logout(request)
         return redirect('home')
+
+
+def settings(request):
+    if request.method == 'POST':
+        return
+    else:
+        return render(request, 'users/settings.html')
