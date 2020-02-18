@@ -7,7 +7,7 @@
 
 {% if posts %}
 {% for post in posts  %}
-<div class=" d-flex flex-column justify-content-center mt-3" >
+<div class=" d-flex flex-column justify-content-center mt-3 col-lg-8" >
     <div class="d-flex flex-row align-items-center mb-2">
         <img class="rounded-circle mr-2" src='{{post.profile.photo.url}}' width="40" height='40' />
         <a class="text-dark" href='{% url 'profile' post.profile %}'>{{post.profile}}</a>
@@ -19,22 +19,63 @@
     </figcaption>
     <div class="d-flex flex-row mt-2">
     {% if user.userprofile in post.likes.all %}
-    <i style="cursor:pointer" class="fas fa-heart fa-2x mr-2"></i>
+    <i  onclick="unlikepost('{{post.id}}')" style="cursor:pointer" class="fas fa-heart fa-2x mr-2"></i>
     {% else %}
-    <i style="cursor:pointer" class="far fa-heart fa-2x mr-2"></i>
+    <i onclick="likepost('{{post.id}}')" style="cursor:pointer" class="far fa-heart fa-2x mr-2"></i>
     {% endif %}
-  <i  style="cursor:pointer" class="far fa-comment fa-2x mr-2"></i>
+  <i style="cursor:pointer" class="far fa-comment fa-2x mr-2"></i>
     </div>
     <p class="mt-2"><b>{{post.likes.count}} likes</b></p>
     <p class="text-right"><small class="timesince">{{post.date|timesince}}</small></p>
     </figure>
 </div>
+
+
 {% endfor %}
 {% else %}
 {% endif %}
 
 
+
+</form>
 </div>
+<script>
+function getCsrf() {
+    var inputElems = document.querySelectorAll('input');
+    var csrfToken = '';
+    for (i = 0; i < inputElems.length; ++i) {
+        if (inputElems[i].name === 'csrfmiddlewaretoken') {
+            csrfToken = inputElems[i].value;
+            break;
+        }
+    }
+    return csrfToken;
+};
+const csrf_token = getCsrf()
 
+const likepost = (id) => {
+  fetch("{% url 'like_post' %}",{
+    headers: {
+      'X-CSRFTOKEN': csrf_token
+    },
+    method: 'POST',
+    body: JSON.stringify({id: id})
+  })
 
+  location.reload()
+}
+
+const unlikepost = (id) => {
+  fetch("{% url 'unlike_post' %}",{
+    headers: {
+      'X-CSRFTOKEN': csrf_token
+    },
+    method: 'POST',
+    body: JSON.stringify({id: id})
+  })
+
+  location.reload()
+}
+</script>
 {% endblock %}
+

@@ -4,6 +4,7 @@ from django.contrib import messages
 from userprofile.models import UserProfile
 from .models import Post
 from django.db.models import Q
+import json
 
 # Create your views here.
 
@@ -17,3 +18,19 @@ def feed(request):
     else:
         messages.error(request, 'Must be logged in to view your feed!')
         return redirect('login')
+
+
+def like_post(request):
+    if request.method == 'POST':
+        json_id = json.loads(request.body)['id']
+        post = Post.objects.get(id=json_id)
+        post.likes.add(request.user.userprofile.id)
+        return redirect('feed')
+
+
+def unlike_post(request):
+    if request.method == 'POST':
+        json_id = json.loads(request.body)['id']
+        post = Post.objects.get(id=json_id)
+        post.likes.remove(request.user.userprofile.id)
+        return redirect('feed')
