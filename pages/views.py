@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'pages/home.html')
+    if request.user.is_authenticated:
+        return redirect('feed')
+    else:
+        return render(request, 'pages/home.html')
 
 
 def about(request):
