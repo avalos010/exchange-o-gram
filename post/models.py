@@ -16,3 +16,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.body[:10]
+
+
+class Comment(models.Model):
+    body = models.TextField()
+    author = models.ForeignKey(UserProfile,  on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    date = models.DateTimeField(default=datetime.now, blank=True)
+
+    def __str__(self):
+        return self.body[:10]

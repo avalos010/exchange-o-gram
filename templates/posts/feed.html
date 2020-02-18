@@ -27,6 +27,23 @@
     </div>
     <p class="mt-2"><b>{{post.likes.count}} likes</b></p>
     <p class="text-right"><small class="timesince">{{post.date|timesince}}</small></p>
+
+    {% if comments %}
+    <div class="d-flex flex-column mb-1">
+      {% for comment in comments %}
+      {% if comment.post.id == post.id %}
+        <div class="d-flex flex-row align-items-center border p-2">
+        <a class="text-dark mr-2 font-weight-bold" href="{% url 'profile' comment.author %}">
+        {{comment.author}}
+        </a>
+        <small>
+        {{comment.body}}
+        </small>
+        </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
     </figure>
 </div>
 
