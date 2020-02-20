@@ -12,7 +12,7 @@ from post.models import Post
 def profile(request, username):
     try:
         profile = get_object_or_404(UserProfile, user__username=username)
-        following = UserProfile.objects.filter(followers=profile.id)
+        # following = UserProfile.objects.filter(followers=profile.id)
         # print('current profile:', profile)
         # print(f'loggedin user: {request.user.userprofile.id}')
         is_following = bool(profile.followers.filter(
@@ -26,7 +26,6 @@ def profile(request, username):
         context = {
             'profile': profile,
             'following': is_following,
-            'following_profiles': following,
             'posts': posts
         }
         return render(request, 'profile/profile.html', context)
@@ -46,7 +45,7 @@ def follow(request):
         if userid != request.user.userprofile.id and username != request.user.userprofile:
 
             profile.followers.add(request.user.userprofile.id)
-
+            request.user.userprofile.following.add(profile.id)
             print('followers', request.user.userprofile.followers.all())
             return redirect('profile', username)
 
@@ -57,4 +56,6 @@ def unfollow(request):
         username = request.POST['username']
         profile = get_object_or_404(UserProfile, user__username=username)
         profile.followers.remove(request.user.userprofile.id)
+        request.user.userprofile.following.remove(profile.id)
+
         return redirect('profile', username)
