@@ -59,3 +59,26 @@ def unfollow(request):
         request.user.userprofile.following.remove(profile.id)
 
         return redirect('profile', username)
+
+
+def edit_user(request):
+    if request.method == "POST":
+        user = User.objects.get(username=request.user)
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        location = request.POST['location']
+        # picture = request.POST['profile_pic']
+
+        if first_name:
+            user.first_name = first_name
+            user.save()
+        if last_name:
+            user.last_name = last_name
+            user.save()
+        if location:
+            user.userprofile.location = location
+            user.save()
+        # if picture is not None:
+        #     user.userprofile.photo = picture
+        #     user.save()
+        return profile(request, user)
