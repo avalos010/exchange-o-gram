@@ -11,7 +11,7 @@ from datetime import datetime
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, unique=True, )
-    photo = models.ImageField(upload_to="media")
+    photo = models.ImageField(upload_to=f"profile/")
     bio = models.TextField(blank=True, max_length=500)
     location = models.CharField(max_length=50, blank=True)
     birth_date = models.DateField(null=True, blank=True)
