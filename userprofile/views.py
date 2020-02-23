@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 import json
 from django.core.exceptions import ObjectDoesNotExist
-from post.models import Post
+from post.models import Post, Comment
 # Create your views here.
 
 
@@ -92,3 +92,15 @@ def edit_profile(request):
             user.userprofile.photo = request.FILES['picture']
             user.save()
         return redirect('profile', request.user)
+
+
+def add_comment(request):
+    if request.method == 'POST':
+        if request.POST['comment']:
+            print(request.POST['comment'])
+            post = Post.objects.get(id=request.POST['post_id'])
+            user = UserProfile.objects.get(id=request.POST['profile_id'])
+            Comment.objects.create(post=post, author=user,
+                                   body=request.POST['comment'])
+
+        return redirect('feed')
