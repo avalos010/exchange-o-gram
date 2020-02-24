@@ -1,27 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form style="margin-top:110px; margin-left: auto; margin-right:auto; height:300px;" class="form-group w-50" action="{% url 'settings' %}">
+<form style="margin-top:110px; margin-left: auto; margin-right:auto; height:300px;" class="form-group w-50" method="POST" action="{% url 'settings' %}">
+{% csrf_token %}
 <div class="d-flex flex-column">
 <label>Email:</label>
-<input class="form-control" type="email" value="{{user.email}}" />
+<input class="form-control" name="email" type="email" value="{{user.email}}" />
 </div>
 <div class="d-flex flex-column">
-<label>Name:</label>
-<input class="form-control" type="text" value="{{user.name}}" />
+<label>First Name:</label>
+<input class="form-control" type="text" name="first_name" value="{{user.first_name}}" />
+</div>
+<div class="d-flex flex-column">
+<label>Last Name:</label>
+<input class="form-control" type="text" name="last_name" value="{{user.last_name}}" />
 </div>
 <div class="d-flex flex-column">
 <label>Location:</label>
-<input class="form-control" type="text" value="{{user.userprofile.location}}" />
-</div>
-<div class="d-flex flex-column">
-<label>Photo:</label>
-  <input type="file" id="img" name="img" accept="image/*">
+<input class="form-control" name='location' type="text" value="{{user.userprofile.location}}" />
 </div>
 <input type="submit" class="btn btn-primary mt-4" value="Update">
 </form>
 
 <div class="container text-center">
-    <a href="" class="btn btn-light"> Change Password </a>
+    <a href="{% url 'change_password' %}" class="btn btn-light"> Change Password </a>
 </div>
 {% endblock %}
